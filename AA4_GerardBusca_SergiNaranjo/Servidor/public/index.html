@@ -7,8 +7,14 @@
   <h1 id="roomMessage">Welcome to Tetris Online!</h1>
 
   <input type="text" id="roomName" placeholder="Nombre de la sala">
-
   <button id="joinBtn">Unirse a la sala</button>
+
+  <div id="controls" style="display: none;">
+    <button onclick="sendMove('Arriba')">Arriba</button>
+    <button onclick="sendMove('Derecha')">Derecha</button>
+    <button onclick="sendMove('Izquierda')">Izquierda</button>
+    <button onclick="sendMove('Abajo')">Abajo</button>
+  </div>
 
   <p>Jugadores en sala: <span id="players">0</span></p>
 
@@ -16,24 +22,30 @@
   <script>
     const socket = io();
 
+    // Función que envía el movimiento al servidor
+    function sendMove(direction) {
+      console.log("Enviando movimiento:", direction); // Esto sale en la consola del navegador
+      socket.emit("playerMove", direction);           // Esto llega al servidor
+    }
+
+    // Unirse a la sala
     document.getElementById("joinBtn").addEventListener("click", () => {
       const roomName = document.getElementById("roomName").value.trim();
+      if (!roomName) return alert("Debes escribir el nombre de la sala");
 
-      if (!roomName) {
-        alert("Debes escribir el nombre de la sala");
-        return;
-      }
-
-      // Solo enviamos el nombre de la sala
       socket.emit("joinRoom", { roomName });
     });
 
-    // Actualizamos la información de la sala
+    // Actualizar info de la sala
     socket.on("roomUpdate", ({ players }) => {
       document.getElementById("players").innerText = players;
-      // Opcional: mantener el mensaje fijo
-      document.getElementById("roomMessage").innerText = "Bienvenido a la sala " + document.getElementById("roomName").value;
+      document.getElementById("roomMessage").innerText =
+        "Bienvenido a la sala " + document.getElementById("roomName").value;
+      document.getElementById("controls").style.display = "block";
     });
+
+    
+
   </script>
 </body>
 </html>
