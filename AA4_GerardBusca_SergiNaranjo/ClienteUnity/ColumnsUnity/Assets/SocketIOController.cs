@@ -1,4 +1,4 @@
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using SocketIOClient;
 using System;
 using System.Linq;
@@ -10,7 +10,7 @@ public class SocketIOController : MonoBehaviour
     public static SocketIOController Instance { get; private set; }
 
     [Header("Config")]
-    [SerializeField] private string serverURL = "http://192.168.1.141:3000/";
+    [SerializeField] private string serverURL = "http://127.0.0.1:3000";
 
     [Header("References")]
     [SerializeField] private NodeGrid grid;
@@ -46,7 +46,13 @@ public class SocketIOController : MonoBehaviour
 
         socket.On("ReceiveRecording", OnReceiveRecording);
         socket.On("ReceiveRecordings", OnReceiveRecordings);
+       
+        socket.OnConnected += (sender, e) => Debug.Log("✅ Socket conectado");
+        socket.OnDisconnected += (sender, e) => Debug.Log("❌ Socket desconectado");
+        
+        socket.On("unityMove", OnUnityMove);
     }
+
 
     public SocketIOUnity GetSocket() => socket;
 
@@ -102,6 +108,32 @@ public class SocketIOController : MonoBehaviour
             Debug.LogError($"Error processing recordings list: {ex.Message}");
         }
     }
+
+
+    private void OnUnityMove(SocketIOResponse response)
+    {
+        string direction = response.GetValue<string>();
+
+        switch (direction.ToLower())
+        {
+            case "arriba":
+                Debug.Log("Up");
+                break;
+            case "abajo":
+                Debug.Log("Down");
+                break;
+            case "izquierda":
+                Debug.Log("Left");
+                break;
+            case "derecha":
+                Debug.Log("Right");
+                break;
+            default:
+                Debug.Log("Movimiento desconocido: " + direction);
+                break;
+        }
+    }
+
 
     #endregion
 
