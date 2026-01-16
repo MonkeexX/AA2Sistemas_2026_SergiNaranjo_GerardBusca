@@ -22,13 +22,11 @@
   <script>
     const socket = io();
 
-    // Función que envía el movimiento al servidor
     function sendMove(direction) {
-      console.log("Enviando movimiento:", direction); // Esto sale en la consola del navegador
-      socket.emit("playerMove", direction);           // Esto llega al servidor
+      console.log("Enviando movimiento:", direction);
+      socket.emit("playerMove", direction);           
     }
 
-    // Unirse a la sala
     document.getElementById("joinBtn").addEventListener("click", () => {
       const roomName = document.getElementById("roomName").value.trim();
       if (!roomName) return alert("Debes escribir el nombre de la sala");
@@ -36,7 +34,6 @@
       socket.emit("joinRoom", { roomName });
     });
 
-    // Actualizar info de la sala
     socket.on("roomUpdate", ({ players }) => {
       document.getElementById("players").innerText = players;
       document.getElementById("roomMessage").innerText =

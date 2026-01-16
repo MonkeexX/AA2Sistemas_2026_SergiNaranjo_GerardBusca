@@ -30,8 +30,8 @@ io.on("connection", (socket) => {
   console.log("Usuario conectado");
 
 socket.on("playerMove", (direction) => {
-  console.log("Servidor recibió movimiento:", direction); // Esto debe verse en la terminal
-  io.emit("unityMove", direction); // Esto reenvía a todos los clientes, incluido Unity
+  console.log("Servidor recibió movimiento:", direction);
+  io.emit("unityMove", direction);
 });
 
   
