@@ -113,7 +113,7 @@ public class SocketIOController : MonoBehaviour
     private void OnUnityMove(SocketIOResponse response)
     {
         string direction = response.GetValue<string>();
-
+        Debug.Log("Unity recibió: " + direction);
         switch (direction.ToLower())
         {
             case "arriba":
