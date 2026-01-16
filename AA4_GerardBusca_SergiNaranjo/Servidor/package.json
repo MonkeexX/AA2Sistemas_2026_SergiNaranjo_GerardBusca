@@ -1,0 +1,30 @@
+{
+  "name": "2025-2026-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gerardbusca-admin@bitbucket.org/gerardbusca/2025-2026-server.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://bitbucket.org/gerardbusca/2025-2026-server/issues"
+  },
+  "homepage": "https://bitbucket.org/gerardbusca/2025-2026-server#readme",
+  "dependencies": {
+    "express": "^4.21.2",
+    "ip": "^2.0.1",
+    "morgan": "^1.10.1",
+    "mysql": "^2.18.1",
+    "socket.io": "^4.8.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
+  }
+}

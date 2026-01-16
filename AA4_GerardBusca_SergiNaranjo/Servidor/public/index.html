@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tetris Online</title>
+</head>
+<body>
+  <h1 id="roomMessage">Welcome to Tetris Online!</h1>
+
+  <input type="text" id="roomName" placeholder="Nombre de la sala">
+  <button id="joinBtn">Unirse a la sala</button>
+
+  <div id="controls" style="display: none;">
+    <button onclick="sendMove('Arriba')">Arriba</button>
+    <button onclick="sendMove('Derecha')">Derecha</button>
+    <button onclick="sendMove('Izquierda')">Izquierda</button>
+    <button onclick="sendMove('Abajo')">Abajo</button>
+  </div>
+
+  <p>Jugadores en sala: <span id="players">0</span></p>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+
+    function sendMove(direction) {
+      console.log("Enviando movimiento:", direction);
+      socket.emit("playerMove", direction);           
+    }
+
+    document.getElementById("joinBtn").addEventListener("click", () => {
+      const roomName = document.getElementById("roomName").value.trim();
+      if (!roomName) return alert("Debes escribir el nombre de la sala");
+
+      socket.emit("joinRoom", { roomName });
+    });
+
+    socket.on("roomUpdate", ({ players }) => {
+      document.getElementById("players").innerText = players;
+      document.getElementById("roomMessage").innerText =
+        "Bienvenido a la sala " + document.getElementById("roomName").value;
+      document.getElementById("controls").style.display = "block";
+    });
+
+    
+
+  </script>
+</body>
+</html>
