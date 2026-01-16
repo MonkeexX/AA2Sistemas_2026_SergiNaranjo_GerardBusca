@@ -1,0 +1,105 @@
+.FullScreenObject
+{
+    width: 100%;
+    height: 100%;
+}
+
+.ChatContainer
+{
+    background-color: peru;
+    width: 100%;
+    height: 100%;
+}
+
+.MessagesContainer {
+    height: 70%;
+}
+
+.MessagesContainer p{
+    font-family:'Times New Roman', Times, serif ;
+    border-style: solid;
+    border-width: 2px;
+    margin: 5px;
+}
+
+.InputContainer
+{
+    height: 10%;
+}
+
+.MessageInput {
+    width: 30%;
+}
+.FullScreenObject
+{
+    width: 100%;
+    height: 100%;
+}
+
+.ChatContainer
+{
+    background-color: peru;
+    width: 100%;
+    height: 100%;
+}
+
+.MessagesContainer {
+    height: 70%;
+}
+
+.MessagesContainer p{
+    font-family:'Times New Roman', Times, serif ;
+    border-style: solid;
+    border-width: 2px;
+    margin: 5px;
+}
+
+.InputContainer
+{
+    height: 10%;
+}
+
+.MessageInput {
+    width: 30%;
+}
+
+.MessageButton{
+    width: 20%;
+}
+
+.MyMessage
+{
+    border-color: green;
+    text-align:right;
+}
+
+.ErrorMessage {
+    color:red
+}
+
+.OtherMessages
+{
+    border-color: red;
+    text-align:left;
+
+}
+.MessageButton{
+    width: 20%;
+}
+
+.MyMessage
+{
+    border-color: green;
+    text-align:right;
+}
+
+.ErrorMessage {
+    color:red
+}
+
+.OtherMessages
+{
+    border-color: red;
+    text-align:left;
+
+}
