@@ -164,7 +164,7 @@ public class NodeGrid : MonoBehaviour
         updates.Add(update);
     }
 
-    private void StartPlayback()
+    public void StartPlayback()
     {
         currentUpdateIndex = 0;
         StopAllCoroutines();

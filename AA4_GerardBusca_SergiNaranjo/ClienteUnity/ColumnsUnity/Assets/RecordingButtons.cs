@@ -64,7 +64,7 @@ public class RecordingButtons : MonoBehaviour
     private IEnumerator WaitForUpdatesAndPlay()
     {
         yield return new WaitUntil(() => grid.updates.Count > 0);
-        grid.StartRecording();
+        grid.StartPlayback();
     }
 
     #endregion
