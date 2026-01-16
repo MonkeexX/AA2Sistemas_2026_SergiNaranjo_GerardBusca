@@ -10,7 +10,7 @@ public class SocketIOController : MonoBehaviour
     public static SocketIOController Instance { get; private set; }
 
     [Header("Config")]
-    [SerializeField] private string serverURL = "http://10.40.3.103:3000"; // URL DE EJEMPLO, CAMBIAR POR LA NUESTRA
+    [SerializeField] private string serverURL = "http://192.168.1.141:3000/";
 
     [Header("References")]
     [SerializeField] private NodeGrid grid;

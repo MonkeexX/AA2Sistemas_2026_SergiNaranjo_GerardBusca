@@ -338,7 +338,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 619f7a0f2ec3b954cba9b696a33d2688, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serverURL: http://10.40.3.103:3000
+  serverURL: http://192.168.1.141:3000/
   grid: {fileID: 750817608}
 --- !u!4 &750817610
 Transform:
