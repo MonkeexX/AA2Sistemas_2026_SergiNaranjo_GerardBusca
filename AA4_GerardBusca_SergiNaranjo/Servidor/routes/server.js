@@ -42,4 +42,8 @@ io.on("connection", (socket) => {
     });
 });
 
-server.listen(3000, () => console.log("Servidor corriendo en http://localhost:3000"));
+server.listen(app.get("port"), "0.0.0.0", () => {
+    const ip = ipHelper.address();
+    const port = app.get("port");
+    console.log("Servidor arrancado en la url: http://" + ip + ":" + port + "/");
+});
