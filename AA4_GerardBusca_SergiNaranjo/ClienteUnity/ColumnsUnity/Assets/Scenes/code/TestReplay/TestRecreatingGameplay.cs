@@ -4,13 +4,10 @@ public class TestRecreatingGameplay : MonoBehaviour
 {
     public GameObject linePrefab;
 
-    void Update()
+
+    void Start()
     {
-        // Por ejemplo, spawneamos al presionar la barra espaciadora
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            SpawnLine();
-        }
+        InvokeRepeating(nameof(SpawnLine), 0f, 2f);
     }
 
     void SpawnLine()
