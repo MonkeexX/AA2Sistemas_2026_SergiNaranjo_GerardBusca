@@ -387,7 +387,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
-  useLocalInput: 1
+  useLocalInput: 0
 --- !u!61 &-8054264176448958335
 BoxCollider2D:
   m_ObjectHideFlags: 0

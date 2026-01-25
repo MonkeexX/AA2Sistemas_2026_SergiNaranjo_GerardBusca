@@ -49,8 +49,8 @@ public class SocketIOController : MonoBehaviour
         socket.On("ReceiveRecording", OnReceiveRecording);
         socket.On("ReceiveRecordings", OnReceiveRecordings);
        
-        socket.OnConnected += (sender, e) => Debug.Log("✅ Socket conectado");
-        socket.OnDisconnected += (sender, e) => Debug.Log("❌ Socket desconectado");
+        socket.OnConnected += (sender, e) => Debug.Log("Socket conectado");
+        socket.OnDisconnected += (sender, e) => Debug.Log("Socket desconectado");
         
         socket.On("unityMove", OnUnityMove);
     }
