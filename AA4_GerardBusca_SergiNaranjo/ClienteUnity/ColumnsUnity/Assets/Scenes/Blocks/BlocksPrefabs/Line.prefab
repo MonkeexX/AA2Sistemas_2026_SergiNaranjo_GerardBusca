@@ -279,11 +279,12 @@ GameObject:
   - component: {fileID: 7482387201581173368}
   - component: {fileID: 3173923023623972042}
   - component: {fileID: 1444044931506554759}
+  - component: {fileID: 8122733613799060178}
   - component: {fileID: -8054264176448958335}
   - component: {fileID: 2656681378061867321}
   m_Layer: 0
   m_Name: Line
-  m_TagString: Untagged
+  m_TagString: Blocker
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -373,6 +374,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20d67e94af7bd0d4ea23f62b4ea9247e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8122733613799060178
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6240181955785357017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbd522d65aba20543afa770e9a79959b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 5
+  useLocalInput: 1
 --- !u!61 &-8054264176448958335
 BoxCollider2D:
   m_ObjectHideFlags: 0

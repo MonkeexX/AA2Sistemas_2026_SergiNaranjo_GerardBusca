@@ -17,6 +17,8 @@ public class SocketIOController : MonoBehaviour
 
     private SocketIOUnity socket;
 
+    public Vector2 CurrentDirection { get; private set; }
+
     #region ===== UNITY LIFECYCLE =====
 
     private void Awake()
@@ -112,24 +114,22 @@ public class SocketIOController : MonoBehaviour
 
     private void OnUnityMove(SocketIOResponse response)
     {
-        string direction = response.GetValue<string>();
+        string direction = response.GetValue<string>().ToLower();
         Debug.Log("Unity recibió: " + direction);
-        switch (direction.ToLower())
+
+        switch (direction)
         {
-            case "arriba":
-                Debug.Log("Up");
-                break;
             case "abajo":
-                Debug.Log("Down");
+                CurrentDirection = Vector2.down;
                 break;
             case "izquierda":
-                Debug.Log("Left");
+                CurrentDirection = Vector2.left;
                 break;
             case "derecha":
-                Debug.Log("Right");
+                CurrentDirection = Vector2.right;
                 break;
             default:
-                Debug.Log("Movimiento desconocido: " + direction);
+                CurrentDirection = Vector2.zero;
                 break;
         }
     }
