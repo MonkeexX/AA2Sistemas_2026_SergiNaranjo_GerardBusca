@@ -21,13 +21,13 @@
     <button id="joinBtn">Unirse a la sala</button>
 
     <div id="controls" style="display: none;">
-      <button onclick="sendMove('Arriba')">Arriba</button>
       <button onclick="sendMove('Derecha')">Derecha</button>
       <button onclick="sendMove('Izquierda')">Izquierda</button>
       <button onclick="sendMove('Abajo')">Abajo</button>
     </div>
 
     <p>Jugadores en sala: <span id="players">0</span></p>
+    <button id="leaveBtn" style="display:none;">Salir de la sala</button>
   </div>
 
   <script src="/socket.io/socket.io.js"></script>
@@ -62,13 +62,29 @@
 
       socket.emit("joinRoom", { roomName });
     });
+    document.getElementById("leaveBtn").addEventListener("click", () => {
+      const roomName = document.getElementById("roomName").value.trim();
+
+      // Avisar al servidor
+      socket.emit("leaveRoom", { roomName });
+
+      // Resetear interfaz
+      document.getElementById("controls").style.display = "none";
+      document.getElementById("leaveBtn").style.display = "none";
+      document.getElementById("roomMessage").innerText = "Welcome to Tetris Online!";
+      document.getElementById("players").innerText = "0";
+
+      alert("Has salido de la sala");
+    });
 
     socket.on("roomUpdate", ({ players }) => {
       document.getElementById("players").innerText = players;
       document.getElementById("roomMessage").innerText =
         "Bienvenido a la sala " + document.getElementById("roomName").value;
       document.getElementById("controls").style.display = "block";
+     document.getElementById("leaveBtn").style.display = "block";
     });
+    
   </script>
 </body>
 </html>
