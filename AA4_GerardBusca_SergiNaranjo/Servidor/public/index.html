@@ -4,6 +4,7 @@
   <title>Tetris Online</title>
 </head>
 <body>
+
   <!-- Login -->
   <div id="loginDiv">
     <h1>Login</h1>
@@ -13,18 +14,14 @@
     <p id="error" style="color:red;"></p>
   </div>
 
-  <!-- Juego (oculto hasta login) -->
+  <!-- Juego -->
   <div id="gameDiv" style="display:none;">
     <h1 id="roomMessage">Welcome to Tetris Online!</h1>
 
     <input type="text" id="roomName" placeholder="Nombre de la sala">
     <button id="joinBtn">Unirse a la sala</button>
 
-    <div id="controls" style="display: none;">
-      <button onclick="sendMove('Derecha')">Derecha</button>
-      <button onclick="sendMove('Izquierda')">Izquierda</button>
-      <button onclick="sendMove('Abajo')">Abajo</button>
-    </div>
+    <p><strong>Controles:</strong> ⬅ ⬆ ➡ ⬇</p>
 
     <p>Jugadores en sala: <span id="players">0</span></p>
     <button id="leaveBtn" style="display:none;">Salir de la sala</button>
@@ -33,21 +30,20 @@
   <script src="/socket.io/socket.io.js"></script>
   <script>
     const socket = io();
+    let inRoom = false;
 
-    // Función para enviar movimientos
+    // Enviar movimiento al servidor
     function sendMove(direction) {
       console.log("Enviando movimiento:", direction);
-      socket.emit("playerMove", direction);           
+      socket.emit("playerMove", direction);
     }
 
-    // Manejo de login
-    document.getElementById("loginBtn").addEventListener("click", async () => {
+    // LOGIN
+    document.getElementById("loginBtn").addEventListener("click", () => {
       const username = document.getElementById("username").value.trim();
       const password = document.getElementById("password").value.trim();
 
-      // Aquí validamos "en cliente" para no instalar nada
-      if(username === "admin" && password === "1234") {
-        // Login correcto → mostrar juego
+      if (username === "admin" && password === "1234") {
         document.getElementById("loginDiv").style.display = "none";
         document.getElementById("gameDiv").style.display = "block";
       } else {
@@ -55,21 +51,21 @@
       }
     });
 
-    // Manejo de sala
+    // UNIRSE A SALA
     document.getElementById("joinBtn").addEventListener("click", () => {
       const roomName = document.getElementById("roomName").value.trim();
       if (!roomName) return alert("Debes escribir el nombre de la sala");
 
       socket.emit("joinRoom", { roomName });
     });
+
+    // SALIR DE SALA
     document.getElementById("leaveBtn").addEventListener("click", () => {
       const roomName = document.getElementById("roomName").value.trim();
 
-      // Avisar al servidor
       socket.emit("leaveRoom", { roomName });
 
-      // Resetear interfaz
-      document.getElementById("controls").style.display = "none";
+      inRoom = false;
       document.getElementById("leaveBtn").style.display = "none";
       document.getElementById("roomMessage").innerText = "Welcome to Tetris Online!";
       document.getElementById("players").innerText = "0";
@@ -77,14 +73,36 @@
       alert("Has salido de la sala");
     });
 
+    // ACTUALIZACIÓN DE SALA
     socket.on("roomUpdate", ({ players }) => {
       document.getElementById("players").innerText = players;
       document.getElementById("roomMessage").innerText =
         "Bienvenido a la sala " + document.getElementById("roomName").value;
-      document.getElementById("controls").style.display = "block";
-     document.getElementById("leaveBtn").style.display = "block";
+
+      inRoom = true;
+      document.getElementById("leaveBtn").style.display = "block";
     });
-    
+
+    // CONTROLES CON TECLADO
+    document.addEventListener("keydown", (event) => {
+      if (!inRoom) return;
+
+      switch (event.key) {
+        case "ArrowLeft":
+          sendMove("Izquierda");
+          break;
+        case "ArrowRight":
+          sendMove("Derecha");
+          break;
+        case "ArrowDown":
+          sendMove("Abajo");
+          break;
+        case "ArrowUp":
+          sendMove("Arriba"); // útil para rotar
+          break;
+      }
+    });
   </script>
+
 </body>
 </html>
