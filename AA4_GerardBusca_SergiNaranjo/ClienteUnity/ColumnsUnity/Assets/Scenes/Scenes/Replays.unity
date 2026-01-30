@@ -687,7 +687,7 @@ MonoBehaviour:
   videoPlayer: {fileID: 1406483395}
   buttonContainer: {fileID: 321554039}
   buttonPrefab: {fileID: 902491713640233634, guid: 0b576dca876efdb4c91f87c640d938c5, type: 3}
-  replayFolder: C:\Users\Sergi\AppData\LocalLow\DefaultCompany\ColumnsUnity
+  replayFolder: 
 --- !u!4 &1420811768
 Transform:
   m_ObjectHideFlags: 0
