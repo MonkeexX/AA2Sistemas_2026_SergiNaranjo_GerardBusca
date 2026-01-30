@@ -33,20 +33,16 @@
   <script>
     const socket = io();
 
-    // Función para enviar movimientos
     function sendMove(direction) {
       console.log("Enviando movimiento:", direction);
       socket.emit("playerMove", direction);           
     }
 
-    // Manejo de login
     document.getElementById("loginBtn").addEventListener("click", async () => {
       const username = document.getElementById("username").value.trim();
       const password = document.getElementById("password").value.trim();
 
-      // Aquí validamos "en cliente" para no instalar nada
       if(username === "admin" && password === "1234") {
-        // Login correcto → mostrar juego
         document.getElementById("loginDiv").style.display = "none";
         document.getElementById("gameDiv").style.display = "block";
       } else {
@@ -54,7 +50,6 @@
       }
     });
 
-    // Manejo de sala
     document.getElementById("joinBtn").addEventListener("click", () => {
       const roomName = document.getElementById("roomName").value.trim();
       if (!roomName) return alert("Debes escribir el nombre de la sala");
