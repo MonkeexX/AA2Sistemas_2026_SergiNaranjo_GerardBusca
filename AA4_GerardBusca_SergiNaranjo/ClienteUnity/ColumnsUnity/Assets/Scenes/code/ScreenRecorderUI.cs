@@ -3,24 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
-using UnityEngine.Video;
-
-[System.Serializable]
-public class FrameData
-{
-    public string[] pixels;
-}
-
-[System.Serializable]
-public class RecordingData
-{
-    public List<FrameData> frames = new List<FrameData>();
-}
 
 public class ScreenRecorderUI : MonoBehaviour
 {
-    public RawImage display;          // UI donde se mostrará el video
-    public float frameRate = 10f;     // FPS de reproducción
+    public RawImage display;
+    public float frameRate = 10f;
 
     private RecordingData recording;
     private Texture2D videoTexture;
@@ -40,6 +27,9 @@ public class ScreenRecorderUI : MonoBehaviour
 
     public void PlayReplay(string jsonFileName)
     {
+        // Asegurarse de que el objeto esté activo
+        gameObject.SetActive(true);
+
         StopReplay();
 
         string path = Path.Combine(Application.persistentDataPath, jsonFileName);
@@ -59,11 +49,10 @@ public class ScreenRecorderUI : MonoBehaviour
         }
 
         int pixelCount = recording.frames[0].pixels.Length;
-        int size = Mathf.RoundToInt(Mathf.Sqrt(pixelCount)); // Asumimos cuadrado
+        int size = Mathf.RoundToInt(Mathf.Sqrt(pixelCount));
         videoTexture = new Texture2D(size, size, TextureFormat.RGB24, false);
         display.texture = videoTexture;
 
-        
         playingCoroutine = StartCoroutine(PlayVideo());
     }
 
@@ -86,8 +75,7 @@ public class ScreenRecorderUI : MonoBehaviour
             yield return new WaitForSeconds(1f / frameRate);
         }
 
-        // Aquí se termina la reproducción
-        gameObject.SetActive(false); // Desactiva el GameObject
+        gameObject.SetActive(false);
     }
 
     public void StopReplay()
