@@ -9,10 +9,10 @@ const io = new Server(server);
 
 const PORT = 3000;
 
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(dirname, "public")));
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public/index.html"));
+  res.sendFile(path.join(dirname, "public/index.html"));
 });
 
 const rooms = {};
@@ -21,11 +21,11 @@ function updateRoomState(roomName) {
   const count = rooms[roomName]?.length || 0;
 
   if (count === 0) {
-    io.to(roomName).emit("roomPaused", {});
-    console.log(`Sala ${roomName} pausada`);
+    io.to(roomName).emit("roomPaused");
+    console.log("Sala ${roomName} pausada");
   } else {
-    io.to(roomName).emit("roomResumed", {});
-    console.log(`Sala ${roomName} reanudada`);
+    io.to(roomName).emit("roomResumed");
+    console.log("Sala ${roomName} reanudada");
   }
 }
 
@@ -33,10 +33,19 @@ io.on("connection", socket => {
   console.log("Usuario conectado:", socket.id);
 
   socket.on("joinRoom", ({ roomName }) => {
+    if (!roomName) return;
+
     if (!rooms[roomName]) rooms[roomName] = [];
+
+    if (rooms[roomName].length >= 4) {
+      socket.emit("roomJoinError", "Sala llena");
+      return;
+    }
 
     rooms[roomName].push(socket.id);
     socket.join(roomName);
+
+    socket.emit("roomJoinSuccess", roomName);
 
     io.to(roomName).emit("roomUpdate", {
       players: rooms[roomName].length
@@ -88,5 +97,5 @@ io.on("connection", socket => {
 });
 
 server.listen(PORT, () => {
-  console.log(`Servidor activo en http://localhost:${PORT}`);
+  console.log("Servidor activo en http://localhost:${PORT}");
 });
