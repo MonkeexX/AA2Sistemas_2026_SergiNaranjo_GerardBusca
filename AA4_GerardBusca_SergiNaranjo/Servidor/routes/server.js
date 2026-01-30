@@ -33,8 +33,6 @@ io.on("connection", socket => {
   console.log("Usuario conectado:", socket.id);
 
   socket.on("joinRoom", ({ roomName }) => {
-    if (!roomName) return;
-
     if (!rooms[roomName]) rooms[roomName] = [];
 
     if (rooms[roomName].length >= 4) {
@@ -44,8 +42,6 @@ io.on("connection", socket => {
 
     rooms[roomName].push(socket.id);
     socket.join(roomName);
-
-    socket.emit("roomJoinSuccess", roomName);
 
     io.to(roomName).emit("roomUpdate", {
       players: rooms[roomName].length
@@ -76,21 +72,14 @@ io.on("connection", socket => {
   });
 
   socket.on("disconnect", () => {
-    console.log("Usuario desconectado:", socket.id);
-
     for (const roomName in rooms) {
       if (rooms[roomName].includes(socket.id)) {
         rooms[roomName] = rooms[roomName].filter(id => id !== socket.id);
-
         io.to(roomName).emit("roomUpdate", {
           players: rooms[roomName].length
         });
-
         updateRoomState(roomName);
-
-        if (rooms[roomName].length === 0) {
-          delete rooms[roomName];
-        }
+        if (rooms[roomName].length === 0) delete rooms[roomName];
       }
     }
   });

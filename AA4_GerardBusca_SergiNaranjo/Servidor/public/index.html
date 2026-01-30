@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tetris Online</title>
+<title>Columns Online</title>
 <style>
   body { margin:0; font-family:Arial,sans-serif; background:#111; color:#fff; display:flex; justify-content:center; align-items:center; min-height:100vh; }
-  .container { width:100%; max-width:400px; padding:20px; box-sizing:border-box; text-align:center; }
+  .container { position:relative; width:100%; max-width:400px; padding:20px; box-sizing:border-box; text-align:center; }
   h1 { font-size:1.8em; margin-bottom:15px; }
   input { width:100%; padding:12px; margin-bottom:10px; font-size:1em; border-radius:6px; border:none; }
   button { width:100%; padding:14px; font-size:1em; border:none; border-radius:6px; background:#00bcd4; color:#000; font-weight:bold; margin-top:10px; cursor:pointer; }
@@ -17,13 +17,24 @@
   .error { color:#ff5252; margin-top:10px; }
   .room { background:#222; padding:12px; margin-bottom:10px; border-radius:6px; display:flex; justify-content:space-between; align-items:center; }
   .room button { width:auto; padding:8px 14px; }
+
+  .user-btn {
+    position:absolute;
+    top:15px;
+    right:15px;
+    width:auto;
+    padding:8px 14px;
+    background:#4caf50;
+    color:#000;
+    font-weight:bold;
+  }
 </style>
 </head>
 <body>
 
 <!-- LOGIN -->
 <div id="loginDiv" class="container">
-  <h1>Tetris Online</h1>
+  <h1>Columns Online</h1>
   <input type="text" id="username" placeholder="Usuario">
   <input type="password" id="password" placeholder="Contraseña">
   <button id="loginBtn">Entrar</button>
@@ -34,25 +45,30 @@
 <!-- LOBBY -->
 <div id="lobbyDiv" class="container" style="display:none;">
   <h1>Salas</h1>
+  <button id="userBtn" class="user-btn">User</button>
 
-  <div class="room">
-    <span>Sala 1</span>
-    <button onclick="enterRoom('Sala 1')">Entrar</button>
-  </div>
-  <div class="room">
-    <span>Sala 2</span>
-    <button onclick="enterRoom('Sala 2')">Entrar</button>
-  </div>
-  <div class="room">
-    <span>Sala 3</span>
-    <button onclick="enterRoom('Sala 3')">Entrar</button>
-  </div>
-  <div class="room">
-    <span>Sala 4</span>
-    <button onclick="enterRoom('Sala 4')">Entrar</button>
-  </div>
+  <div class="room"><span>Sala 1</span><button onclick="enterRoom('Sala 1')">Entrar</button></div>
+  <div class="room"><span>Sala 2</span><button onclick="enterRoom('Sala 2')">Entrar</button></div>
+  <div class="room"><span>Sala 3</span><button onclick="enterRoom('Sala 3')">Entrar</button></div>
+  <div class="room"><span>Sala 4</span><button onclick="enterRoom('Sala 4')">Entrar</button></div>
 
   <button id="logoutBtn" class="danger">Cerrar sesión</button>
+</div>
+
+<!-- USER -->
+<div id="userDiv" class="container" style="display:none;">
+  <h1>Perfil de Usuario</h1>
+
+  <p style="font-size:1.2em;">
+    Usuario: <strong id="userNameText"></strong>
+  </p>
+
+  <!-- HORA EXACTA -->
+  <p style="font-size:1.2em;">
+    Hora actual: <strong id="timeText"></strong>
+  </p>
+
+  <button id="backToLobbyBtn">Volver</button>
 </div>
 
 <!-- SALA -->
@@ -73,25 +89,40 @@
 const socket = io();
 let inRoom = false;
 let currentRoom = null;
-const users = {};
+let currentUser = null;
+
+// reloj
+let clockInterval = null;
+
+const users = { admin: "1234" };
 
 // ELEMENTOS
 const loginDiv = document.getElementById("loginDiv");
 const lobbyDiv = document.getElementById("lobbyDiv");
 const roomDiv = document.getElementById("roomDiv");
+const userDiv = document.getElementById("userDiv");
+
 const usernameInput = document.getElementById("username");
 const passwordInput = document.getElementById("password");
 const errorText = document.getElementById("error");
+
 const roomTitle = document.getElementById("roomTitle");
 const playersText = document.getElementById("players");
+
 const leaveBtn = document.getElementById("leaveBtn");
 const logoutBtn = document.getElementById("logoutBtn");
+
+const userBtn = document.getElementById("userBtn");
+const userNameText = document.getElementById("userNameText");
+const timeText = document.getElementById("timeText");
+const backToLobbyBtn = document.getElementById("backToLobbyBtn");
 
 // LOGIN
 document.getElementById("loginBtn").addEventListener("click", () => {
   const u = usernameInput.value.trim();
   const p = passwordInput.value.trim();
   if(users[u] && users[u] === p){
+    currentUser = u;
     loginSuccess();
   } else {
     errorText.innerText="Usuario o contraseña incorrectos";
@@ -104,6 +135,7 @@ document.getElementById("registerBtn").addEventListener("click", () => {
   if(!u||!p){ errorText.innerText="Debes escribir usuario y contraseña"; return; }
   if(users[u]){ errorText.innerText="El usuario ya existe"; return; }
   users[u] = p;
+  currentUser = u;
   loginSuccess();
 });
 
@@ -111,6 +143,35 @@ function loginSuccess(){
   loginDiv.style.display="none";
   lobbyDiv.style.display="block";
   errorText.innerText="";
+}
+
+// USER
+userBtn.addEventListener("click", () => {
+  lobbyDiv.style.display="none";
+  userDiv.style.display="block";
+  userNameText.innerText = currentUser;
+  startClock();
+});
+
+backToLobbyBtn.addEventListener("click", () => {
+  stopClock();
+  userDiv.style.display="none";
+  lobbyDiv.style.display="block";
+});
+
+// RELOJ
+function startClock(){
+  updateTime();
+  clockInterval = setInterval(updateTime, 1000);
+}
+
+function stopClock(){
+  clearInterval(clockInterval);
+  clockInterval = null;
+}
+
+function updateTime(){
+  timeText.innerText = new Date().toLocaleTimeString();
 }
 
 // ENTRAR A SALA
@@ -133,7 +194,7 @@ leaveBtn.addEventListener("click",()=>{
   lobbyDiv.style.display="block";
 });
 
-// CERRAR SESIÓN
+// CERRAR SESIÓN (igual que original)
 logoutBtn.addEventListener("click",()=>{location.reload();});
 
 // CONTROLES
@@ -153,14 +214,6 @@ socket.on("roomUpdate",({players})=>{
   if(inRoom){
     playersText.innerText=players;
   }
-});
-
-// PAUSA/REANUDA SALA
-socket.on("roomPaused",()=>{
-  console.log("Sala pausada (sin jugadores)");
-});
-socket.on("roomResumed",()=>{
-  console.log("Sala reanudada (hay jugadores)");
 });
 </script>
 </body>
