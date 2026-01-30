@@ -51,10 +51,8 @@ public class RoomList : MonoBehaviour
     {
         Debug.Log("Servidor seleccionado: " + serverName);
 
-        // Guardamos el nombre de la room
         RoomData.roomName = "Room " + serverName;
 
-        // Cargamos la escena Room
         SceneManager.LoadScene("Room");
     }
 }

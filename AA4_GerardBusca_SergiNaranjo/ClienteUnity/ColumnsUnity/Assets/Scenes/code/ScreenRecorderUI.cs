@@ -27,7 +27,6 @@ public class ScreenRecorderUI : MonoBehaviour
 
     public void PlayReplay(string jsonFileName)
     {
-        // Asegurarse de que el objeto esté activo
         gameObject.SetActive(true);
 
         StopReplay();

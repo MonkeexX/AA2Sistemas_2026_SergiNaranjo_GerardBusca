@@ -12,10 +12,10 @@ public class Recording : MonoBehaviour
     [Header("Grabación")]
     public int width = 320;
     public int height = 240;
-    public float captureInterval = 0.1f; // Intervalo entre frames
+    public float captureInterval = 0.1f;
 
     [Header("Manager")]
-    public ReplayManager replayManager; // Referencia al ReplayManager
+    public ReplayManager replayManager;
 
     private bool isRecording = false;
     private RecordingData recording = new RecordingData();
@@ -108,7 +108,6 @@ public class Recording : MonoBehaviour
         if (recordingCoroutine != null)
             StopCoroutine(recordingCoroutine);
 
-        // Crear nombre único para el JSON usando timestamp
         string fileName = "Recording_" + System.DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".json";
         string folder = Path.Combine(Application.persistentDataPath, replayManager.replayFolder);
         if (!Directory.Exists(folder))
@@ -120,14 +119,12 @@ public class Recording : MonoBehaviour
 
         Debug.Log("Grabación detenida y guardada en: " + path);
 
-        // Crear botón dinámico para reproducir esta grabación
         if (replayManager != null)
         {
-            string capturedFileName = fileName; // Evitar closure
+            string capturedFileName = fileName;
             replayManager.AddReplayButton(capturedFileName);
         }
 
-        // Reiniciar la grabación para poder grabar otra vez
         recording = new RecordingData();
     }
 }
